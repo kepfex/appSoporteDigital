@@ -1,0 +1,134 @@
+
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:schemalocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+    <url-mapping id="home">
+        <pattern value="/home" />
+        <view-id value="/faces/index.xhtml" />
+    </url-mapping>
+        
+    <url-mapping id="login">
+        <pattern value="/login" />
+        <view-id value="/faces/auth/login.xhtml" />
+    </url-mapping>
+        
+    <url-mapping id="dashboard">
+        <pattern value="/dashboard" />
+        <view-id value="/faces/layouts/dashboard.xhtml" />
+    </url-mapping>
+      
+    <!--Mapeo para Usuarios -->  
+    <url-mapping id="lista-usuarios-cliente">
+        <pattern value="/usuarios/clientes" />
+        <view-id value="/faces/layouts/usuarios/clientes/usuarios-cliente.xhtml" />
+    </url-mapping>
+    
+    <url-mapping id="usuarios-cliente-crear">
+        <pattern value="/usuarios/clientes/crear"/>
+        <view-id value="/faces/layouts/usuarios/clientes/cliente-crear.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="usuarios-cliente-actualizar">
+        <pattern value="/usuarios/clientes/actualizar"/>
+        <view-id value="/faces/layouts/usuarios/clientes/cliente-actualizar.xhtml"/>
+<!--        <action>#{usuarioActualizarBean.init}</action>-->
+    </url-mapping>
+    
+    <url-mapping id="lista-usuarios-empresa">
+        <pattern value="/usuarios/empresa" />
+        <view-id value="/faces/layouts/usuarios/empresa/listar.xhtml" />
+    </url-mapping>
+    
+    <url-mapping id="crear-usuarios-empresa">
+        <pattern value="/usuarios/empresa/crear" />
+        <view-id value="/faces/layouts/usuarios/empresa/crear.xhtml" />
+    </url-mapping>
+    
+    <url-mapping id="usuarios-empresa-actualizar">
+        <pattern value="/usuarios/empresa/actualizar"/>
+        <view-id value="/faces/layouts/usuarios/empresa/actualizar.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="lista-usuarios-soporte">
+        <pattern value="/usuarios/soporte" />
+        <view-id value="/faces/layouts/usuarios/soporte/listar.xhtml" />
+    </url-mapping>
+    
+    <url-mapping id="crear-usuarios-empresa">
+        <pattern value="/usuarios/soporte/crear" />
+        <view-id value="/faces/layouts/usuarios/soporte/crear.xhtml" />
+    </url-mapping>
+    
+    <url-mapping id="usuarios-empresa-actualizar">
+        <pattern value="/usuarios/soporte/actualizar"/>
+        <view-id value="/faces/layouts/usuarios/soporte/actualizar.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="usarios-confirmar-cuenta">
+        <pattern value="/confirmar-cuenta/#{token}"/>
+        <view-id value="/faces/auth/confirmar-cuenta.xhtml"/>
+        <action>#{confirmarPasswordBean.init}</action>
+    </url-mapping>
+    
+    <!-- SOLICITUDES -->
+    <url-mapping id="solicitudes-cliente">
+        <pattern value="/mis-solicitudes"/>
+        <view-id value="/faces/layouts/solicitudes/solicitud-cliente.xhtml"/>
+    </url-mapping>
+    <url-mapping id="solicitudes-soporte-all">
+        <pattern value="/soporte/solicitudes"/>
+        <view-id value="/faces/layouts/solicitudes/solicitud-soporte.xhtml"/>
+    </url-mapping>
+    <url-mapping id="solicitudes-soporte">
+        <pattern value="/soporte/solicitudes/pendientes"/>
+        <view-id value="/faces/layouts/solicitudes/solicitud-soporte-pendientes.xhtml"/>
+    </url-mapping>
+    <url-mapping id="solicitudes-soporte-asignar">
+        <pattern value="/soporte/solicitudes/asignar"/>
+        <view-id value="/faces/layouts/asignacion/asignacion-soporte.xhtml"/>
+    </url-mapping>
+    <url-mapping id="solicitudes-soporte-asignadas">
+        <pattern value="/soporte/solicitudes/asignadas"/>
+        <view-id value="/faces/layouts/asignacion/asignadas.xhtml"/>
+    </url-mapping>
+    <url-mapping id="solicitudes-estado-cliente">
+        <pattern value="/soporte/solicitudes/atendidas"/>
+        <view-id value="/faces/layouts/solicitudes/solicitud-cliente-atendidas.xhtml"/>
+    </url-mapping>
+    
+    <!--Actividades-->
+    <url-mapping id="actividades-asignadas">
+        <pattern value="/actividades/asignadas"/>
+        <view-id value="/faces/layouts/trabajo/empleados.xhtml"/>
+    </url-mapping>
+    <url-mapping id="actividades-atendidas">
+        <pattern value="/actividades/atendidas"/>
+        <view-id value="/faces/layouts/trabajo/empleados-asignaciones-atendidas.xhtml"/>
+    </url-mapping>
+    <url-mapping id="actividades-asignadas-registrar">
+        <pattern value="/actividades/asignadas/registar"/>
+        <view-id value="/faces/layouts/trabajo/actividades.xhtml"/>
+    </url-mapping>
+
+    <!-- Dashboards -->
+    <url-mapping id="dash-cliente">
+        <pattern value="/cliente/dashboard"/>
+        <view-id value="/faces/dashboard/cliente.xhtml"/>
+    </url-mapping>
+    <url-mapping id="dash-empresa">
+        <pattern value="/empresa/dashboard"/>
+        <view-id value="/faces/dashboard/empresa.xhtml"/>
+    </url-mapping>
+    <url-mapping id="dash-soporte">
+        <pattern value="/soporte/dashboard"/>
+        <view-id value="/faces/dashboard/soporte.xhtml"/>
+    </url-mapping>
+    
+    <!-- Dashboards -->
+    <url-mapping id="error-404">
+        <pattern value="/error/404"/>
+        <view-id value="/faces/error/error-404.xhtml"/>
+    </url-mapping>
+</pretty-config>
+

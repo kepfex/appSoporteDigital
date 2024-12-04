@@ -1,0 +1,25 @@
+# Archivos y carpetas generados por NetBeans
+nbproject/private/
+nbbuild/
+dist/
+.nb-gradle/
+nb-configuration/
+
+# Archivos y carpetas generados por Maven
+target/
+*.log
+
+# Node.js y Tailwind
+node_modules/
+package-lock.json
+
+# Configuración de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos específicos del entorno
+*.iml
+.idea/
+.vscode/
+*.swp
+*.tmp

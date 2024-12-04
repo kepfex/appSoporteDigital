@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<h:head>
+  <title>Soporte Digital</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <h:outputStylesheet library="css" name="app.css" />
+  <h:outputStylesheet library="css" name="utility-patterns.css" />
+</h:head>
+<h:body class="bg-gray-50 font-inter tracking-tight text-gray-900 antialiased">
+  <div class="flex min-h-screen flex-col overflow-hidden supports-[overflow:clip]:overflow-clip">
+    <header class="fixed top-2 z-30 w-full md:top-6">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div
+          class="relative flex h-14 items-center justify-between gap-3 rounded-2xl bg-white/90 px-3 shadow-lg shadow-black/[0.03] backdrop-blur-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-transparent before:[background:linear-gradient(theme(colors.gray.100),theme(colors.gray.200))_border-box] before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)]">
+          <div class="flex flex-1 items-center">
+            <div class="inline-flex">
+              <h:graphicImage name="/img/logo-dark-s-d.svg" alt="logo soporte digital" class="w-10 h-10">
+              </h:graphicImage>
+            </div>
+          </div>
+
+          <ul class="flex flex-1 items-center justify-end gap-3">
+            <li>
+              <h:link outcome="/faces/auth/login"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg font-medium transition-all px-3 py-[5px] bg-gray-900 text-gray-200 shadow hover:bg-gray-700">
+                Iniciar Sesión
+              </h:link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <section class="relative">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="pb-12 pt-32 md:pb-20 md:pt-40">
+          <div class="pb-12 text-center md:pb-16">
+            <div
+              class="mb-6 border-y [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1]">
+            </div>
+            <h1
+              class="mb-6 border-y text-5xl font-bold md:text-6xl">
+              <span class="bg-gradient-to-r from-green-600 to-green-400 text-transparent bg-clip-text font-black">
+                Soporte Digital
+              </span><br class="max-lg:hidden" />
+              Soluciones Ágiles para tus Necesidades Digitales
+            </h1>
+            <div class="mx-auto max-w-3xl">
+              <p class="mb-8 text-lg text-gray-700">
+                123digit@l, una empresa líder en el desarrollo de software en
+                el ámbito local, presenta Soporte Digital, una solución web
+                diseñada para transformar la manera en que brindamos
+                asistencia a nuestros clientes.
+              </p>
+              <div
+                class="relative before:absolute before:inset-0 before:border-y before:[border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1]">
+                <div class="mx-auto max-w-xs sm:flex sm:max-w-none sm:justify-center">
+                  <a class="px-4 py-[11px] group mb-4 w-full bg-gradient-to-t from-green-600 to-green-500 bg-[length:100%_100%] bg-[bottom] text-white shadow-lg whitespace-nowrap rounded-lg hover:bg-[length:100%_150%] sm:mb-0 sm:w-auto"
+                    href="#0">
+                    <span class="relative inline-flex items-center">
+                      Ir a dashboard
+                      <span
+                        class="ml-1 tracking-normal text-green-100 transition-transform group-hover:translate-x-0.5">
+                        -&gt;
+                      </span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</h:body>
+
+</html>

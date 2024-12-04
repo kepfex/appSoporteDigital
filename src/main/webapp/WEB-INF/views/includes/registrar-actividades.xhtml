@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="jakarta.tags.core">
+
+    <ui:composition template="/WEB-INF/views/templates/template-dashboard.xhtml">
+        <ui:define name="titulo-head">Registrar actividades</ui:define>
+
+        <ui:define name="sidebar">
+            <ui:include src="/WEB-INF/views/components/sidebar-cliente.xhtml"/>
+        </ui:define>
+
+        <ui:define name="body-dashboard">
+
+            <h:form id="form1" class="mb-8 max-w-xl-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Registrar actividades para la solicitud: 
+                    <span class="text-green-500 dark:text-green-400">
+                        ##{actividadesBean.solicitudSeleccionado.year}#{actividadesBean.solicitudSeleccionado.mes}#{actividadesBean.solicitudSeleccionado.numeroCorrelativo}
+                    </span>
+                </h2>
+                <div class="text-left text-gray-500 dark:text-gray-400 ">
+                    <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400 border-b pb-4 mb-6">
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span>
+                                <span class="font-semibold text-gray-900 dark:text-white">Cliente: </span> 
+                                <span class="text-xl text-blue-500 dark:text-blue-400">#{actividadesBean.solicitudSeleccionado.usuario.cliente.razonSocial}</span>
+                                <span class="font-semibold text-gray-900 dark:text-white">Creado el: </span>
+                                #{actividadesBean.solicitudSeleccionado.fechaHora.format(helpersBean.formatterFecha)} - 
+                                #{actividadesBean.solicitudSeleccionado.fechaHora.format(helpersBean.formatterHora)}
+                            </span>
+                        </li>
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span><span class="font-semibold text-gray-900 dark:text-white">Motivo: </span> #{actividadesBean.solicitudSeleccionado.motivo}</span>
+                        </li>
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span>
+                                <span class="font-semibold text-gray-900 dark:text-white">Tipo de solicitud: </span>
+                                <span class="uppercase tipo-solicitud-#{actividadesBean.solicitudSeleccionado.tipo.codigo.toLowerCase()}">
+                                    #{actividadesBean.solicitudSeleccionado.tipo.descripcion}
+                                </span>
+                            </span>
+                        </li>
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span><span class="font-semibold text-gray-900 dark:text-white">Asignado a: </span>
+                                #{actividadesBean.usuarioSeleccionado.nombres} #{actividadesBean.usuarioSeleccionado.apellidoPaterno} #{actividadesBean.usuarioSeleccionado.apellidoMaterno}
+                                <span class="font-semibold text-gray-900 dark:text-white">el </span>
+                                #{actividadesBean.asignacionSeleccionada.fechaHoraAsignacion.format(helpersBean.formatterFecha)} - #{actividadesBean.asignacionSeleccionada.fechaHoraAsignacion.format(helpersBean.formatterHora)}
+                            </span>
+                        </li> 
+                    </ul>
+                </div>
+
+                <c:if test="#{actividadesBean.coordinador}">
+                    <p:commandButton value="Iniciar atención" rendered="#{actividadesBean.existeFechaHoraAtencion}"
+                                     actionListener="#{actividadesBean.actualizarFechaHoraInicioDeAtencion()}"
+                                     update="form1 form2"
+                                     oncomplete="ocultarFiltros()"
+                                     icon="pi pi-briefcase"
+                                     styleClass="ui-button-warning" />
+
+                    <p:commandButton value="Finalizar atención" rendered="#{!actividadesBean.existeFechaHoraAtencion}"
+                                     actionListener="#{actividadesBean.finalizarAtencion()}"
+                                     update="form1 form2"
+                                     oncomplete="ocultarFiltros()"
+                                     icon="pi pi-briefcase"
+                                     styleClass="ui-button-info" />
+
+                </c:if>
+                <c:if test="#{!actividadesBean.coordinador}">
+                    <p:outputPanel rendered="#{actividadesBean.existeFechaHoraAtencion}">
+                        <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
+                            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                                <i class='bx bx-x text-red-500 dark:text-red-400 text-2xl'></i>
+                                <span>El coordinador aún no incia esta atención.</span>
+                            </li>
+                        </ul>
+                    </p:outputPanel>
+                    <p:outputPanel rendered="#{!actividadesBean.existeFechaHoraAtencion}">
+                        <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
+                            <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                                <i class='bx bxs-briefcase-alt-2 text-indigo-500 dark:text-indigo-400 text-2xl'></i>
+                                <span>Actividad en curso.</span>
+                            </li>
+                        </ul>
+                    </p:outputPanel>
+                </c:if>
+            </h:form>
+
+            <h:form id="form2">
+                <!-- Mensaje de Éxito -->
+                <p:growl id="messages" showDetail="true"/>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton id="btnactividad" value="Registrar actividad" 
+                                         disabled="#{actividadesBean.existeFechaHoraAtencion}"
+                                         actionListener="#{actividadesBean.openNew()}"
+                                         icon="pi pi-plus" 
+                                         styleClass="ui-button-success"
+                                         update="form1 form2 :dialogs:manage-actividad-content"
+                                         oncomplete="PF('manageActividadDialog').show()">
+                            <p:resetInput target=":dialogs:manage-actividad-content" />
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="dt-actividades" widgetVar="dtActividades" var="trabajo" value="#{actividadesBean.trabajosDTO}"
+                             reflow="true" styleClass="products-table"
+                             rowKey="#{trabajo.id}" paginator="true" rows="10" selectionRowMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">ACTIVIDADES</span>
+                            <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtActividades').filter()" placeholder="Buscar" />
+                            </span>
+                        </div>
+                    </f:facet>
+
+
+                    <p:column headerText="Descripción" 
+                              sortBy="#{trabajo.descripción}" 
+                              filterBy="#{trabajo.descripción}"
+                              style="width: 400px;">
+                        <h:outputText value="#{trabajo.descripción}"/>
+                    </p:column>
+                    <p:column headerText="Fecha inicio" 
+                              sortBy="#{trabajo.fechaHoraInicioActividad.format(helpersBean.formatterFecha)} - #{trabajo.fechaHoraInicioActividad.format(helpersBean.formatterHora)}" 
+                              filterBy="#{trabajo.fechaHoraInicioActividad.format(helpersBean.formatterFecha)} - #{trabajo.fechaHoraInicioActividad.format(helpersBean.formatterHora)}">
+                        <h:outputText value="#{trabajo.fechaHoraInicioActividad.format(helpersBean.formatterFecha)} - #{trabajo.fechaHoraInicioActividad.format(helpersBean.formatterHora)}" style="font-weight: 700"/>
+                    </p:column>
+                    <p:column headerText="Fecha fin" 
+                              sortBy="" 
+                              filterBy="">
+                        <h:outputText value="#{trabajo.fechaHoraTerminoActividad.format(helpersBean.formatterFecha)} - #{trabajo.fechaHoraTerminoActividad.format(helpersBean.formatterHora)}" style="font-weight: 700"/>
+                    </p:column>
+
+                    <p:column exportable="false" ariaHeaderText="Acciones">
+                        <p:commandButton icon="pi pi-pencil" disabled="#{trabajo.fechaHoraTerminoActividad != null}"
+                                         oncomplete="PF('manageActividadDialog').show()"
+                                         update=":dialogs:manage-actividad-content"
+                                         styleClass="edit-button rounded-button ui-button-warning" style="margin-right: .5rem"
+                                         process="@this">
+                            <f:setPropertyActionListener value="#{trabajo}" target="#{actividadesBean.trabajoDTO}" />
+                            <p:resetInput target=":dialogs:manage-actividad-content" />
+                        </p:commandButton>
+                        <p:commandButton id="btnFinalizar" icon="pi pi-check-circle"
+                                         process="@this" disabled="#{trabajo.fechaHoraTerminoActividad != null}"
+                                         styleClass="rounded-button ui-button-info" style="margin-right: .5rem"
+                                         oncomplete="PF('finalizarActividadDialog').show()">
+                            <f:setPropertyActionListener value="#{trabajo}" target="#{actividadesBean.trabajoDTO}" />
+                        </p:commandButton>
+                        <p:tooltip for="btnFinalizar" value="Terminar actividad" position="top"/>
+                        <p:commandButton icon="pi pi-trash"
+                                         process="@this"
+                                         styleClass="rounded-button ui-button-danger" 
+                                         oncomplete="PF('deleteActividadDialog').show()">
+                            <f:setPropertyActionListener value="#{trabajo}" target="#{actividadesBean.trabajoDTO}" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="dialogs">
+                <p:dialog header="Detalles de actividad" widgetVar="manageActividadDialog" showEffect="fade" modal="true" 
+                          responsive="true">
+                    <p:outputPanel id="manage-actividad-content" class="ui-fluid">
+                        <!-- Inicio Dialogo registro solicitud -->
+                        <p:outputPanel >
+                            <div class="field">
+                                <p:outputLabel for="description">Description</p:outputLabel>
+                                <p:inputTextarea id="description" value="#{actividadesBean.trabajoDTO.descripción}" required="true"/>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer" >
+                        <p:commandButton  value="Enviar" icon="pi pi-check" 
+                                          actionListener="#{actividadesBean.guardarActividad()}"
+                                          update="manage-actividad-content" 
+                                          process="manage-actividad-content @this" 
+                                          oncomplete="ocultarFiltros()"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                         oncomplete="ocultarFiltros()"
+                                         onclick="PF('manageActividadDialog').hide()"
+                                         class="ui-button-secondary" type="button" />
+                    </f:facet>
+                </p:dialog>
+                
+                <p:confirmDialog widgetVar="deleteActividadDialog" showEffect="fade" width="300"
+                                 message="¿Eliminar actividad?" header="Confirmar" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check" 
+                                     actionListener="#{pruebasBean.eliminarUsuario()}"
+                                     process="@this"
+                                     oncomplete="PF('deleteActividadDialog').hide() ocultarFiltros()"
+                                     />
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteActividadDialog').hide()" />
+                </p:confirmDialog>
+                <p:confirmDialog widgetVar="finalizarActividadDialog" showEffect="fade" width="300"
+                                 message="¿Finalizar esta actividad?" header="Confirmar" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check" 
+                                     actionListener="#{actividadesBean.finalizarActividad()}"
+                                     process="@this"
+                                     oncomplete="PF('finalizarActividadDialog').hide()"
+                                     />
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('finalizarActividadDialog').hide()" />
+                </p:confirmDialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

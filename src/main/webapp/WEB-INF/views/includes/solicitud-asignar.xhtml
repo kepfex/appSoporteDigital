@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/views/templates/template-dashboard.xhtml">
+
+        <ui:define name="titulo-head">Asignar colaboradores</ui:define>
+        <ui:define name="Verificar-usuario">
+            <f:event type="preRenderView" listener="#{validacionTipoUsuarioBean.validarAccesoSoporte()}"/>
+        </ui:define>
+
+        <ui:define name="sidebar">
+            <ui:include src="/WEB-INF/views/components/sidebar-cliente.xhtml"/>
+        </ui:define>
+
+        <ui:define name="body-dashboard">
+
+            <h:form id="form-search" class="mb-8 max-w-xl-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <header>
+                    <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        Asignar coloborador(es) para solicitud número: 
+                        <span class="text-green-500 dark:text-green-400">
+                            ##{solicitudAsignacionesBean.solicitudDTO.year}#{solicitudAsignacionesBean.solicitudDTO.mes}#{solicitudAsignacionesBean.solicitudDTO.numeroCorrelativo}
+                        </span>
+                    </h2>
+                </header>
+                <div class="text-left text-gray-500 dark:text-gray-400 ">
+                    <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400 border-b pb-4 mb-6">
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span>
+                                <span class="font-semibold text-gray-900 dark:text-white">Cliente: </span> 
+                                <span class="text-xl text-blue-500 dark:text-blue-400">#{solicitudAsignacionesBean.solicitudDTO.usuario.cliente.razonSocial}</span>
+                                <span class="font-semibold text-gray-900 dark:text-white">Creado el: </span>
+                                #{solicitudAsignacionesBean.solicitudDTO.fechaHora.format(solicitudAsignacionesBean.formatterFecha)} - 
+                                #{solicitudAsignacionesBean.solicitudDTO.fechaHora.format(solicitudAsignacionesBean.formatterHora)}
+                              
+                            </span>
+                        </li>
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span><span class="font-semibold text-gray-900 dark:text-white">Motivo: </span> #{solicitudAsignacionesBean.solicitudDTO.motivo}</span>
+                        </li>
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span><span class="font-semibold text-gray-900 dark:text-white">Estado: </span>
+                                <span class="estado-solicitud-#{solicitudAsignacionesBean.solicitudDTO.estado.name().toLowerCase()}">
+                                    #{solicitudAsignacionesBean.solicitudDTO.estado}
+                                </span>
+                            </span>
+                        </li>
+                        <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <i class='bx bx-check text-green-500 dark:text-green-400 text-2xl'></i>
+                            <span>
+                                <span class="font-semibold text-gray-900 dark:text-white">Tipo de solicitud: </span>
+                                <span class="uppercase tipo-solicitud-#{solicitudAsignacionesBean.solicitudDTO.tipo.codigo.toLowerCase()}">
+                                    #{solicitudAsignacionesBean.solicitudDTO.tipo.descripcion}
+                                </span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <p:outputPanel class="ui-fluid">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 items-end">
+                        <div class="col-span-1">
+                            <p:outputLabel for="rol" value="Buscar colaboradores por Rol" class="font-semibold text-gray-900 dark:text-white mb-2"/>
+                            <p:selectOneMenu id="rol" value="#{solicitudAsignacionesBean.rolDTO.id}" 
+                                             required="true">
+                                <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{solicitudAsignacionesBean.listaRoles}" var="rol" 
+                                               itemLabel="#{rol.nombre}" itemValue="#{rol.id}"/>
+                                <p:ajax event="change" update="msg8" />
+                            </p:selectOneMenu>
+
+                            <h:message
+                                id="msg8"
+                                for="rol"
+                                class="text-red-600 dark:text-red-400 text-xs" />
+                        </div>
+                        <div>
+                            <p:commandButton icon="pi pi-search"
+                                             styleClass="edit-button rounded-button ui-button-info" 
+                                             process="@form"
+                                             update="@(form)"
+                                             oncomplete="ocultarFiltros()"
+                                             action="#{solicitudAsignacionesBean.buscarColaborador}">
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </p:outputPanel>
+
+            </h:form>
+
+            <h:form id="form">
+                <!-- Mensaje de Éxito -->
+                <p:growl id="growl" showDetail="true"/>
+
+                <p:dataTable id="dt-colaboradores" widgetVar="dtColaboradores" var="usuario" value="#{solicitudAsignacionesBean.colaboradores}"
+                             reflow="true" styleClass="products-table"
+                             rowKey="#{usuario.id}" paginator="true" rows="5" selectionRowMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">COLABORADORES DE EMPRESA</span>
+                            <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtSolicitudes').filter()" placeholder="Buscar" />
+                            </span>
+                        </div>
+                    </f:facet>
+
+
+                    <p:column headerText="N° DNI" 
+                              sortBy="#{usuario.numeroDeDocumentoDeIdentidad}" 
+                              filterBy="#{usuario.numeroDeDocumentoDeIdentidad}"
+                              style="width: 80px;">
+                        <h:outputText value="#{usuario.numeroDeDocumentoDeIdentidad}" style="font-weight: 700"/>
+                    </p:column>
+                    <p:column headerText="Colaborador de empresa" 
+                              sortBy="#{usuario.nombres} #{usuario.apellidoPaterno} #{usuario.apellidoMaterno}" 
+                              filterBy="#{usuario.nombres} #{usuario.apellidoPaterno} #{usuario.apellidoMaterno}">
+                        <h:outputText value="#{usuario.nombres} #{usuario.apellidoPaterno} #{usuario.apellidoMaterno}"/>
+                    </p:column>
+                    <p:column headerText="Rol" sortBy="#{usuario.rol.nombre}" filterBy="#{usuario.rol.nombre}">
+                        <h:outputText value="#{usuario.rol.nombre}" />
+                    </p:column>
+                    <p:column headerText="Estado" 
+                              sortBy="#{usuario.activo}}" 
+                              filterBy="#{usuario.activo}">
+                        <h:outputText value="#{usuario.activo}"/>
+                    </p:column>
+                    <p:column exportable="false" ariaHeaderText="Acciones">
+                        <p:commandButton icon="pi pi-plus"
+                                         styleClass="rounded-button ui-button-success"
+                                         actionListener="#{solicitudAsignacionesBean.agregarAsignacion(usuario)}"
+                                         update="form form3:dt-asignaciones "
+                                         oncomplete="ocultarFiltros()"
+                                         process="@this" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="form3">
+                <!-- Mensaje de Éxito
+                <p:growl id="messages" showDetail="true"/> -->
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p>Colaborador(es) asignado(s:)</p>
+
+                        <p:commandButton value="Guardar Asignación"
+                                         action="#{solicitudAsignacionesBean.guardarAsignaciones}"
+                                         update="form:growl"
+                                         icon="pi pi-save"
+                                         styleClass="ui-button-success" />
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <p:dataTable id="dt-asignaciones" widgetVar="dtAsignaciones" var="asignado" value="#{solicitudAsignacionesBean.asignacionesDTO}"
+                             reflow="true" styleClass="products-table"
+                             rowKey="#{asignado.idUsuario}" paginator="true" rows="10" selectionRowMode="add" paginatorPosition="bottom">
+
+
+
+                    <p:column headerText="N° DNI" 
+                              sortBy="#{asignado.numeroDNI}" 
+                              style="width: 80px;">
+                        <h:outputText value="#{asignado.numeroDNI}" style="font-weight: 700"/>
+                    </p:column>
+                    <p:column headerText="Datos del colaborador" 
+                              sortBy="#{asignado.nombres} #{asignado.apellidos}">
+                        <h:outputText value="#{asignado.nombres}"/>
+                    </p:column>
+                    <p:column headerText="Rol" sortBy="#{asignado.nombreRol}">
+                        <h:outputText value="#{asignado.nombreRol}" />
+                    </p:column>
+                    <p:column headerText="¿Es coordinador?">
+                        <p:toggleSwitch value="#{asignado.coordinador}" onIcon="pi pi-check" offIcon="pi pi-times">
+                            <p:ajax listener="#{solicitudAsignacionesBean.toggleCoordinador(asignado)}"
+                                    update="dt-asignaciones" />
+                        </p:toggleSwitch>
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="pi pi-trash"
+                                         actionListener="#{solicitudAsignacionesBean.removerAsignacion(asignado)}"
+                                         update="form3:dt-asignaciones form"
+                                         styleClass="ui-button-danger" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

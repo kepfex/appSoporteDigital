@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/views/templates/template-dashboard.xhtml">
+
+        <ui:define name="titulo-head">Solicitudes asignadas</ui:define>
+
+        <ui:define name="sidebar">
+            <ui:include src="/WEB-INF/views/components/sidebar-cliente.xhtml"/>
+        </ui:define>
+
+        <ui:define name="body-dashboard">
+            <h2 class="mb-10 text-2xl font-bold tracking-tight text-gray-900">Lista de solicitudes asignadas</h2>
+            <h:form id="form">
+                <!-- Mensaje de Éxito -->
+                <p:growl id="messages" showDetail="true"/>
+
+                <p:dataTable id="dt-asignadas" widgetVar="dtAsignadas" var="asignada" value="#{asignacionesBean.asignacionesAtendidas}"
+                             reflow="true" styleClass="products-table"
+                             rowKey="#{asignada.idUsuario}" paginator="true" rows="10" selectionRowMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">SOLICITUDES ASIGNADAS</span>
+                            <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtAsignadas').filter()" placeholder="Buscar" />
+                            </span>
+                        </div>
+                    </f:facet>
+
+                    <p:column headerText="Codigo" 
+                              sortBy="#{asignada.codigoSolicitud}" 
+                              filterBy="#{asignada.codigoSolicitud}"
+                              style="width: 80px;">
+                        <h:outputText value="#{asignada.codigoSolicitud}" style="font-weight: 700"/>
+                    </p:column>
+                    <p:column headerText="Fecha Creación" 
+                              sortBy="#{asignada.fechaCreacion}" 
+                              filterBy="#{asignada.fechaCreacion}">
+                        <h:outputText value="#{asignada.fechaCreacion}"/>
+                    </p:column>
+                    <p:column headerText="Razón Social" 
+                              sortBy="#{asignada.razonSocial}" 
+                              filterBy="#{asignada.razonSocial}">
+                        <h:outputText value="#{asignada.razonSocial}"/>
+                    </p:column>
+                    <p:column headerText="Estado" 
+                              sortBy="#{asignada.estado}" 
+                              filterBy="#{asignada.estado}">
+                        <h:outputText value="#{asignada.estado}" class="estado-solicitud-#{asignada.estado.name().toLowerCase()}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Asignación" 
+                              sortBy="#{asignada.fechaHoraAsignacion.format(asignacionesBean.formatterFecha)} - #{asignada.fechaHoraAsignacion.format(asignacionesBean.formatterHora)}" 
+                              filterBy="#{asignada.fechaHoraAsignacion.format(asignacionesBean.formatterFecha)} - #{asignada.fechaHoraAsignacion.format(asignacionesBean.formatterHora)}">
+                        <h:outputText value="#{asignada.fechaHoraAsignacion.format(asignacionesBean.formatterFecha)} - #{asignada.fechaHoraAsignacion.format(asignacionesBean.formatterHora)}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Fin" 
+                              sortBy="#{asignada.fechaHoraTerminoAtencion.format(asignacionesBean.formatterFecha)} - #{asignada.fechaHoraTerminoAtencion.format(asignacionesBean.formatterHora)}" 
+                              filterBy="#{asignada.fechaHoraTerminoAtencion.format(asignacionesBean.formatterFecha)} - #{asignada.fechaHoraTerminoAtencion.format(asignacionesBean.formatterHora)}">
+                        <h:outputText value="#{asignada.fechaHoraTerminoAtencion.format(asignacionesBean.formatterFecha)} - #{asignada.fechaHoraTerminoAtencion.format(asignacionesBean.formatterHora)}"/>
+                    </p:column>
+                    <p:column headerText="¿Eres Coordinador?" 
+                              sortBy="#{asignada.coordinador ? 'SI': 'NO'}">
+                        <h:outputText value="#{asignada.coordinador ? 'SI': 'NO'}" class="es-coordinador-#{asignada.coordinador}"/>
+                    </p:column>
+                    <p:column exportable="false" ariaHeaderText="Actions">
+                        <p:commandButton value="Ver" icon="pi pi-eye"
+                                         
+                                         
+                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                            <!-- oncomplete="PF('dlg2').show()"
+                            update=":dialogs:detalle-solicitud"-->
+                            <!--<f:setPropertyActionListener value="#{solicitud}" target="#{solicitudBean.solicitud}" /> comment -->
+                            <p:resetInput target=":dialogs:detalle-solicitud" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

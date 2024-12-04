@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/views/templates/template-dashboard.xhtml">
+        <ui:define name="titulo-head">Usuarios de Clientes</ui:define>
+
+        <ui:define name="sidebar">
+            <ui:include src="/WEB-INF/views/components/sidebar-cliente.xhtml"/>
+        </ui:define>
+
+        <ui:define name="body-dashboard">
+            <h2>Lista de Usuarios</h2>
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true"/>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                         actionListener="#{usuarioClienteBean.nuevo()}"
+                                         update=":dialogs:manage-usuario-content" 
+                                         oncomplete="PF('gestionarUsuario').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                            <p:resetInput target=":dialogs:manage-usuario-content" />
+                        </p:commandButton>
+                        <p:linkButton outcome="/faces/layouts/usuarios/clientes/cliente-crear" 
+                            icon="pi pi-plus" value="Nuevo" styleClass="ui-button-success" style="margin-right:20px;">
+                        </p:linkButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="dt-products" value="#{usuarioClienteBean.colaboradores}" var="colaborador" widgetVar="dtProducts" reflow="true" styleClass="products-table"
+                             paginator="true" rows="10" selectionRowMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header flex justify-between items-center">
+                            <span style="font-weight: bold">USUARIOS - Colaborador de Clientes</span>
+                            <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Buscar" />
+                            </span>
+                        </div>
+                    </f:facet> 
+
+
+                    <p:column headerText="Tip. Doc." sortBy="#{colaborador.tipoDeDocumentoDeIdentidad}">
+                        <h:outputText value="#{colaborador.tipoDeDocumentoDeIdentidad}" 
+                                      class="border-2 border-dashed border-indigo-500 py-1 px-4 rounded"/>
+                    </p:column>
+                    <p:column headerText="Num. Ident." sortBy="#{colaborador.numeroDeDocumentoDeIdentidad}">
+                        <h:outputText value="#{colaborador.numeroDeDocumentoDeIdentidad}" />
+                    </p:column>
+                    <p:column headerText="Nombres" sortBy="#{colaborador.nombres}">
+                        <h:outputText value="#{colaborador.nombres}" />
+                    </p:column>
+                    <p:column headerText="Apellidos" sortBy="#{colaborador.apellidoPaterno} #{colaborador.apellidoMaterno}">
+                        <h:outputText value="#{colaborador.apellidoPaterno} #{colaborador.apellidoMaterno}" />
+                    </p:column>
+                    <p:column headerText="Correo" sortBy="#{colaborador.correoElectronico}">
+                        <h:outputText value="#{colaborador.correoElectronico}" />
+                    </p:column>
+                    <p:column headerText="Empresa" sortBy="#{colaborador.cliente.razonSocial}">
+                        <h:outputText value="#{colaborador.cliente.razonSocial}" />
+                    </p:column>
+                    <p:column class="capitalize" headerText="Estado" sortBy="#{colaborador.tipo}">
+                        <p:tag
+                            icon="#{colaborador.activo == 'ACTIVO' ? 'pi pi-check' : 'pi pi-times' }" 
+                            severity="#{colaborador.activo == 'ACTIVO'  ? 'success' : 'danger' }"                               
+                            value="#{colaborador.activo.toLowerCase()}" rounded="true">
+                        </p:tag>
+                    </p:column>
+                    <p:column exportable="false" headerText="Acciones">
+                        <p:commandButton icon="pi pi-pencil" 
+                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                        </p:commandButton>
+                        <h:outputText value=" "/>
+                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                         process="@this"
+                                         oncomplete="PF('deleteProductDialog').show()">
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="dialogs">
+                
+                <p:dialog header="Usuario" 
+                          showEffect="fade" 
+                          modal="true" 
+                          widgetVar="gestionarUsuario"
+                          width="90vw"
+                          responsive="true"
+                          class="responsive-dialog">
+                    <p:outputPanel id="manage-usuario-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty usuarioClienteBean.usuarioSeleccionado}">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4">
+                                <div class="col-span-1 lg:col-span-2">
+                                    <p:outputLabel for="tipoDocumento" value="Tipo de documento"/>
+                                    <p:selectOneMenu id="tipoDocumento" value="#{usuarioClienteBean.tipoDocumento}">
+                                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{usuarioClienteBean.tiposDocumentos}" var="tipo" 
+                                                       itemLabel="#{tipo.descripcion}" itemValue="#{tipo.codigo}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="col-span-1 md:col-span-1">
+                                    <p:outputLabel for="numeroDoc" value="Núm. Documento" />
+                                    <p:inputText id="numeroDoc" value="hola2" placeholder="Número de documento"/>
+                                    <p:message for="numeroDoc" />
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1 gap-x-4">
+                                <div class="col-span-1 md:col-span-full lg:col-span-1">
+                                    <p:outputLabel for="nombres" value="Nombes" />
+                                    <p:inputText id="nombres" value="hola2" placeholder="Tus nombres"/>
+                                    <p:message for="nombres" /> 
+                                </div>
+                                <div class="col-span-1">
+                                    <p:outputLabel for="apellidoPaterno" value="Apellido Paterno" />
+                                    <p:inputText id="apellidoPaterno" value="hola3" placeholder="Tu apellido paterno"/>
+                                    <p:message for="apellidoPaterno" />
+                                </div>
+                                <div class="col-span-1">
+                                    <p:outputLabel for="apellidoMaterno" value="Apellido Materno" />
+                                    <p:inputText id="apellidoMaterno" value="hola3" placeholder="Tu apellido materno"/>
+                                    <p:message for="apellidoMaterno" />
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1 gap-x-4">
+                                <div class="col-span-1 md:col-span-full lg:col-span-1">
+                                    <p:outputLabel for="correo" value="Correo Electrónico" />
+                                    <p:inputText id="correo" value="hola2" type="email" placeholder="Tu correo eectrónico"/>
+                                    <p:message for="correo" /> 
+                                </div>
+                                <div class="col-span-1">
+                                    <p:outputLabel for="pwd1" value="Contraseña"/>
+                                    <p:password id="pwd1" value="123" match="pwd2" label="Password 1"  toggleMask="true" required="true"
+                                                feedback="true"
+                                                promptLabel="Ingresa tu contraseña" weakLabel="Débil"
+                                                goodLabel="Buena" strongLabel="Fuerte" placeholder="Tu contraseña"/>
+                                </div>
+
+                                <div class="col-span-1">
+                                    <p:outputLabel for="pwd2" value="Contraseña"/>
+                                    <p:password id="pwd2" value="123" label="Password 2" required="true" placeholder="Repite tu contraseña"/>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="col-span-1 md:col-span-2">
+                                    <p:outputLabel for="cliente" value="Razón Social Cliente"/>
+                                    <p:selectOneMenu id="cliente" value="#{usuarioClienteBean.tipoDocumento}">
+                                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{usuarioClienteBean.tiposDocumentos}" var="tipo" 
+                                                       itemLabel="#{tipo.descripcion}" itemValue="#{tipo.codigo}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="">
+                                    <p:outputLabel value="Estado"/>
+                                    <p:selectOneButton value="#{usuarioClienteBean.estado}">
+                                        <f:selectItem itemLabel="Activo" itemValue="true"/>
+                                        <f:selectItem itemLabel="Inactivo" itemValue="false"/>
+                                    </p:selectOneButton>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{usuarioClienteBean.submitPrueba()}"
+                                         update="manage-usuario-content" process="manage-usuario-content @this" />
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('gestionarUsuario').hide()"
+                                         class="ui-button-secondary" type="button" />
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
+                                 message="¿Eliminar el producto?" header="Confirmar" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check" 
+                                     process="@this"
+                                     />
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteProductDialog').hide()" />
+                </p:confirmDialog>
+
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" update="msgs" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

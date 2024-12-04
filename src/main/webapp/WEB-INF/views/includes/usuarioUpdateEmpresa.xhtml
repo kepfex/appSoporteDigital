@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="/WEB-INF/views/templates/template-dashboard.xhtml">
+        <ui:define name="titulo-head">Actualizar usuario</ui:define>
+
+        <ui:define name="sidebar">
+            <ui:include src="/WEB-INF/views/components/sidebar-cliente.xhtml"/>
+        </ui:define>
+
+        <ui:define name="body-dashboard">
+
+            <p:card>
+                <h:form id="form">
+
+                    <header>
+                        <h2 class="mb-10 text-2xl font-bold tracking-tight text-gray-900">
+                            Empresa | Actualizar Usuario
+                        </h2>
+                    </header>
+                    <p:messages id="messages" showDetail="true" closable="true" globalOnly="true" >
+                        <p:autoUpdate/>
+                    </p:messages>
+                    <p:outputPanel class="ui-fluid">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                            <div class="col-span-1 lg:col-span-2">
+                                <p:outputLabel for="tipoDocumento" value="Tipo de documento" class="font-semibold"/>
+                                <p:selectOneMenu id="tipoDocumento" value="#{usuarioActualizarBean.usuarioDTO.tipoDeDocumentoDeIdentidad}"
+                                                 required="true" requiredMessage="Tipo de documento es requerido">
+                                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="DNI - Documento Nacional de Identidad" itemValue="DNI"/>
+                                    <f:selectItem itemLabel="CE - Carnet de Extranjería" itemValue="CE"/>
+                                    <f:selectItem itemLabel="PAS - Pasaporte" itemValue="PAS"/>
+                                    <f:selectItem itemLabel="TAM - Tarjeta Andina de Migración" itemValue="TAM"/>
+                                    <p:ajax event="change" update="msg0" />
+                                </p:selectOneMenu>
+                                <h:message
+                                    id="msg0"
+                                    for="tipoDocumento"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    />
+                            </div>
+                            <div class="col-span-1 md:col-span-1">
+                                <p:outputLabel for="numeroDoc" value="Núm. Documento" class="font-semibold"/>
+                                <p:inputText id="numeroDoc" value="#{usuarioActualizarBean.usuarioDTO.numeroDeDocumentoDeIdentidad}" placeholder="Número de documento" 
+                                             required="true" requiredMessage="Número de documento es requerido">
+                                    <p:ajax event="blur" update="msg1"/>
+                                </p:inputText>
+                                <h:message
+                                    id="msg1"
+                                    for="numeroDoc"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1 gap-4 mb-4">
+                            <div class="col-span-1 md:col-span-full lg:col-span-1">
+                                <p:outputLabel for="nombres" value="Nombes" class="font-semibold"/>
+                                <p:inputText id="nombres" value="#{usuarioActualizarBean.usuarioDTO.nombres}" placeholder="Tus nombres"
+                                             required="true" requiredMessage="Nombre es requerido">
+                                    <p:ajax event="blur" update="msg2"/>
+                                </p:inputText>
+                                <h:message
+                                    id="msg2"
+                                    for="nombres"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    /> 
+                            </div>
+                            <div class="col-span-1">
+                                <p:outputLabel for="apellidoPaterno" value="Apellido Paterno" class="font-semibold"/>
+                                <p:inputText id="apellidoPaterno" value="#{usuarioActualizarBean.usuarioDTO.apellidoPaterno}" placeholder="Tu apellido paterno"
+                                             required="true" requiredMessage="Apellido paterno es requerido">
+                                    <p:ajax event="blur" update="msg3"/>
+                                </p:inputText>
+                                <h:message
+                                    id="msg3"
+                                    for="apellidoPaterno"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    />
+                            </div>
+                            <div class="col-span-1">
+                                <p:outputLabel for="apellidoMaterno" value="Apellido Materno" class="font-semibold"/>
+                                <p:inputText id="apellidoMaterno" value="#{usuarioActualizarBean.usuarioDTO.apellidoMaterno}" placeholder="Tu apellido materno"
+                                             required="true" requiredMessage="Apellido materno es requerido">
+                                    <p:ajax event="keyup" update="msg4"/>
+                                </p:inputText>
+                                <h:message
+                                    id="msg4"
+                                    for="apellidoMaterno"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1 gap-4 mb-4">
+                            <div class="col-span-1 md:col-span-full lg:col-span-1">
+                                <p:outputLabel for="correo" value="Correo Electrónico" class="font-semibold"/>
+                                <p:inputText id="correo" value="#{usuarioActualizarBean.usuarioDTO.correoElectronico}" type="email" placeholder="Tu correo eectrónico"
+                                             required="true" requiredMessage="Correo electrónico es requerido">
+                                    <p:ajax event="keyup" update="msg5"/>
+                                </p:inputText>
+                                <h:message
+                                    id="msg5"
+                                    for="correo"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    />
+                            </div>
+
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                            <div class="col-span-1 md:col-span-2">
+                                <p:outputLabel for="cliente" value="Rol" class="font-semibold"/>
+                                <p:selectOneMenu id="cliente" value="#{usuarioActualizarBean.usuarioDTO.rol.id}" 
+                                                 required="true" requiredMessage="Rol es requerido">
+                                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usuarioActualizarBean.listaRoles}" var="rol" 
+                                                   itemLabel="#{rol.nombre}" itemValue="#{rol.id}"/>
+                                    <p:ajax event="change" update="msg8" />
+                                </p:selectOneMenu>
+                                <h:message
+                                    id="msg8"
+                                    for="cliente"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    />
+                            </div>
+                            <div class="">
+                                <p:outputLabel for="estado" value="Estado" class="font-semibold"/>
+                                <p:selectOneButton id="estado" value="#{usuarioActualizarBean.usuarioDTO.activo}"
+                                                   required="true" requiredMessage="Estado es requerido ¿Activo o Inactivo?">
+                                    <f:selectItem itemLabel="Activo" itemValue="ACTIVO" class="bg-red-700"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="INACTIVO"/>
+                                    <p:ajax event="change" update="msg9" />
+                                </p:selectOneButton>
+                                <h:message
+                                    id="msg9"
+                                    for="estado"
+                                    class="text-red-600 dark:text-red-400 text-xs"
+                                    />
+                            </div>
+                        </div>
+                    </p:outputPanel>
+
+                    <footer class="flex justify-end pt-5 gap-4" name="footer">
+                        <p:commandButton 
+                            value="Actualizar" 
+                            process="@form" 
+                            icon="pi pi-check"
+                            update="@(form)" 
+                            action="#{usuarioActualizarBean.actualizarUsuarioCliente()}"
+                            >
+
+                        </p:commandButton>
+                        <p:linkButton outcome="/faces/layouts/usuarios/empresa/listar" 
+                                      icon="pi pi-times" value="Cancelar" styleClass="ui-button-secondary">
+                        </p:linkButton>
+                    </footer>
+
+                    <p:confirmDialog id="confirmDialog" widgetVar="confirmDialog" showEffect="fade" closable="false" width="500"
+                                     visible="#{usuarioBean.mostrarDialogo}" header="Registro Exitoso" severity="info"
+                                     message="Se ha enviado un correo a #{usuarioBean.correo} para su confirmación y creación de contraseña.">
+                        <p:commandButton value="Aceptar" action="#{usuarioBean.aceptarDialogo()}" update="form" />
+                    </p:confirmDialog>
+                </h:form>
+            </p:card>
+        </ui:define>
+    </ui:composition>
+</html>

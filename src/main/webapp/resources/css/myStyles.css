@@ -1,0 +1,127 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 13 nov. 2024, 11:59:18
+    Author     : KEVIN
+*/
+
+body .ui-selectbooleanbutton.ui-state-active,
+body .ui-selectonebutton > .ui-button.ui-state-active,
+body .ui-selectmanybutton > .ui-button.ui-state-active {
+    background-color: #10b981;
+    border-color: #4ade80;
+}
+
+body .ui-selectbooleanbutton.ui-state-active:hover,
+body .ui-selectonebutton > .ui-button.ui-state-active:hover,
+body .ui-selectmanybutton > .ui-button.ui-state-active:hover {
+    background-color: #16a34a; /* Color de fondo en hover */
+}
+
+.ui-inputfield.ui-state-error {
+    border-color: red !important;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); /* Efecto de sombra roja opcional */
+}
+
+.ui-column-filter {
+    display: none;
+}
+
+/* Estilos para etiquetas de tipo de solicitud */
+.tipo-solicitud-c {
+    color: #4338ca;
+    background-color: #c7d2fe;
+    border: 1px solid #4338ca;
+    padding: .3rem .8rem;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 13px;
+}
+.tipo-solicitud-r {
+    color: #155e75;
+    background-color: #a5f3fc;
+    border: 1px solid #155e75;
+    padding: .3rem .8rem;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.tipo-solicitud-e {
+    color: #ef4444;
+    background-color: #fecaca;
+    border: 1px solid #ef4444;
+    padding: .3rem .8rem;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+/* ESTILOS PARA ESTADO DE SOLICITUD */
+.estado-solicitud-pendiente {
+    color: #d97706;
+    background-color: #fde68a;
+    padding: .3rem .8rem;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.estado-solicitud-asignada {
+    color: #0369a1;
+    background-color: #bfdbfe;
+    padding: .3rem .8rem;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.estado-solicitud-en_proceso {
+    color: #077269;
+    background-color: #99f6e4;
+    padding: .3rem .8rem;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.estado-solicitud-atendida {
+    color: #599703;
+    background-color: #d9f99d;
+    padding: .3rem .8rem;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* ESTILOS USUARIO CONFIRMADO  */
+.usuario-confirmado-true, 
+.usuario-confirmado-false {
+    padding: .3rem .8rem;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.usuario-confirmado-true {
+    background-color: #d9f99d;
+    color: #15803d;
+    
+}
+.usuario-confirmado-false {
+    background-color: #fecaca;
+    color: #dc2626;
+}
+
+/* ESTILOS ES COORDINADOR? */
+.es-coordinador-true, 
+.es-coordinador-false {
+    padding: .3rem .8rem;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+.es-coordinador-true {
+    background-color: #d9f99d;
+    color: #15803d;  
+}
+.es-coordinador-false {
+    background-color: #fecaca;
+    color: #dc2626;
+}

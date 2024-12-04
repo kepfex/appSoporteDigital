@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:c="jakarta.tags.core">
+
+    <c:if test="#{sessionScope.usuarioLogeadoDTO.tipoUsuario.name() == 'CLIENTE'}">
+        <li>
+            <h:link outcome="/faces/dashboard/cliente" class="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors">
+                <i class='bx bxs-dashboard text-primary-500'></i>
+                Dashboard
+            </h:link>
+        </li>
+        <li>
+            <button
+                id="sub-menu"
+                class="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+                >
+                <span class="flex items-center gap-4">
+                    <i class='bx bx-mail-send text-primary-500'></i>
+                    Solicitudes
+                </span>
+                <i class="bx bx-chevron-right arrow transition-all"></i>
+            </button>
+            <ul
+                class="max-h-0 overflow-y-hidden transition-all duration-300 ease-in-out"
+                >
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/solicitudes/solicitud-cliente"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Mis Solicitudes
+                    </h:link>
+                </li>
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/solicitudes/solicitud-cliente-atendidas"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Atendidas
+                    </h:link>
+                </li>
+            </ul>
+        </li>
+    </c:if>
+
+    <c:if test="#{sessionScope.usuarioLogeadoDTO.tipoUsuario.name() == 'SOPORTE'}">
+        <li>
+            <h:link outcome="/faces/dashboard/soporte" class="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors">
+                <i class='bx bxs-dashboard text-primary-500'></i>
+                Dashboard
+            </h:link>
+        </li>
+
+        <li>
+            <button
+                id="sub-menu"
+                class="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+                >
+                <span class="flex items-center gap-4">
+                    <i class='bx bxs-message-dots text-primary-500'></i>
+                    Solicitudes
+                </span>
+                <i class="bx bx-chevron-right arrow transition-all"></i>
+            </button>
+            <ul class="max-h-0 overflow-y-hidden transition-all duration-300 ease-in-out" >
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/solicitudes/solicitud-soporte"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Ver todas
+                    </h:link>
+                </li>
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/solicitudes/solicitud-soporte-pendientes"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Pendientes
+                    </h:link>
+                </li>
+
+                <li>
+                    <a
+                        href="#"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Asignadas
+                    </a>
+                </li>
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/solicitudes/solicitud-soporte-atendidas"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Pendientes
+                    </h:link>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <button
+                id="sub-menu"
+                class="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+                >
+                <span class="flex items-center gap-4">
+                    <i class='bx bxs-group text-primary-500'></i>
+                    Gest. Usuarios
+                </span>
+                <i class="bx bx-chevron-right arrow transition-all"></i>
+            </button>
+            <ul
+                class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
+                >
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/usuarios/clientes/usuarios-cliente"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Clientes
+                    </h:link>
+                </li>
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/usuarios/empresa/listar"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Colaboradores
+                    </h:link>
+                </li>
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/usuarios/soporte/listar"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Soporte
+                    </h:link>
+                </li>
+            </ul>
+        </li>
+    </c:if>
+
+    <c:if test="#{sessionScope.usuarioLogeadoDTO.tipoUsuario.name() == 'EMPRESA'}">
+        <li>
+            <h:link outcome="/faces/dashboard/empresa" class="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors">
+                <i class='bx bxs-dashboard text-primary-500'></i>
+                Dashboard
+            </h:link>
+        </li>
+        <li>
+            <button
+                id="sub-menu"
+                class="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+                >
+                <span class="flex items-center gap-4">
+                    <i class='bx bx-paste text-primary-500'></i>
+                    Actividades
+                </span>
+                <i
+                    class="bx bx-chevron-right arrow transition-transform duration-300"
+                    ></i>
+            </button>
+            <ul
+                class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
+                >
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/trabajo/empleados"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Asignadas
+                    </h:link>
+                </li>
+                <li>
+                    <h:link
+                        outcome="/faces/layouts/trabajo/empleados-asignaciones-atendidas"
+                        class="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-primary-300 transition-colors"
+                        >
+                        Finalizadas
+                    </h:link>
+                </li>
+            </ul>
+        </li>
+    </c:if>
+</html>

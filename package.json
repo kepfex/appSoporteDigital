@@ -1,0 +1,15 @@
+{
+  "name": "appsoportedigital",
+  "version": "1.0.0",
+  "description": "Este proyecto esta construido con Java, JSF, Tailwind",
+  "main": "index.js",
+  "scripts": {
+    "scanTailwind": "npx tailwindcss -i ./src/main/resources/development/css/tailwind.css -o ./src/main/webapp/resources/css/app.css --watch"
+  },
+  "author": "Kevin Espinoza Poma",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.14",
+    "@tailwindcss/forms": "^0.5.7"
+  }
+}

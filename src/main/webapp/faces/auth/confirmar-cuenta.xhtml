@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Soporte Digital | <ui:insert name="titulo-head">Confirma tu cuenta</ui:insert></title>
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+
+        <h:outputStylesheet library="css" name="app.css"/>
+    </h:head>
+    <h:body>
+        
+        <p:outputPanel rendered="#{confirmarPasswordBean.tokenValido}">
+            <h2 class="my-9 bg-gradient-to-r from-green-700 to-green-400 text-transparent bg-clip-text text-5xl capitalize font-black text-center">Confirmar Cuenta</h2>
+            <main class="flex justify-center">
+                <div class="max-w-2xl w-[90%] md:w-full p-6 bg-white border border-gray-200 rounded-lg shadow">
+
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Estas a un paso de acceder a tu cuenta</h5>
+
+                    <p class="mb-3 font-normal text-gray-700">Para ello deberás crear tu contraseña y confirmarla.</p>
+
+                    <h:form class="mt-10">
+                        <div class="ui-fluid">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div class="col-span-1">
+                                    <p:outputLabel for="pwd1" value="Contraseña" class="font-semibold"/>
+                                    <p:password id="pwd1" value="#{confirmarPasswordBean.password}" 
+                                                match="pwd2" label="Password 1"  toggleMask="true"
+                                                feedback="true"
+                                                promptLabel="Ingresa tu contraseña" weakLabel="Débil"
+                                                goodLabel="Buena" strongLabel="Fuerte" placeholder="Tu contraseña"
+                                                required="true" requiredMessage="este campo es requerido">
+
+                                    </p:password>
+                                    <h:message
+                                        id="msg6"
+                                        for="pwd1"
+                                        class="text-red-600 dark:text-red-400 text-xs"
+                                        />
+                                </div>
+
+                                <div class="col-span-1">
+                                    <p:outputLabel for="pwd2" value="Repite tu Contraseña" class="font-semibold"/>
+                                    <p:password id="pwd2" value="#{confirmarPasswordBean.password}" label="Password 2" 
+                                                placeholder="Repite tu contraseña"
+                                                required="true" requiredMessage="este campo es requerido">
+
+                                    </p:password>
+                                    <h:message
+                                        id="msg7"
+                                        for="pwd2"
+                                        class="text-red-600 dark:text-red-400 text-xs"
+                                        />
+                                </div>
+                            </div>
+                        </div>
+
+                        <h:inputHidden value="#{confirmarPasswordBean.token}" />
+                        <footer class="flex justify-end pt-5 gap-4" name="footer">
+                            <p:commandButton 
+                                value="Guardar" 
+                                process="@form" 
+                                icon="pi pi-check"
+                                update="@(form)" 
+                                action="#{confirmarPasswordBean.guardarPass()}"
+                                >
+
+                            </p:commandButton>
+                        </footer>
+                    </h:form>
+                </div>
+            </main>
+        </p:outputPanel>
+        
+        <p:outputLabel rendered="#{!confirmarPasswordBean.tokenValido}" class="flex justify-center flex-col items-center">
+            <div class="max-w-2xl w-[90%] md:w-full mt-20 block">
+                <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                        <span class="font-medium">Token Incorrecto!</span> El token proporcionado no es válido o ha expirado.
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center items-center">
+                <a href="#{request.contextPath}/home" 
+                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+                    Volver a inicio
+                </a>
+            </div>
+        </p:outputLabel>
+    </h:body>
+</html>

@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/views/templates/template-dashboard.xhtml">
+        <ui:define name="titulo-head">Usuarios Soporte</ui:define>
+
+        <ui:define name="sidebar">
+            <ui:include src="/WEB-INF/views/components/sidebar-cliente.xhtml"/>
+        </ui:define>
+
+        <ui:define name="body-dashboard">
+            <h2 class="mb-10 text-2xl font-bold tracking-tight text-gray-900">Lista de usuarios Gestores de Soporte</h2>
+            <h:form id="form">
+                <!-- Mensaje de Éxito -->
+                <p:growl id="messages" showDetail="true"/>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:linkButton outcome="/faces/layouts/usuarios/soporte/crear" 
+                                      icon="pi pi-plus" value="Nuevo" styleClass="ui-button-success" style="margin-right:20px;">
+                        </p:linkButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="dt-usuarios" widgetVar="dtUsuarios" value="#{pruebasBean.usuariosDTO}" var="colaborador" reflow="true" styleClass="products-table"
+                             paginator="true" rows="10" selectionRowMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header flex justify-between items-center">
+                            <span style="font-weight: bold">USUARIOS - Gestor de Soporte</span>
+                            <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtUsuarios').filter()" placeholder="Buscar" />
+                            </span>
+                        </div>
+                    </f:facet> 
+
+
+                    <p:column headerText="Tip. Doc." sortBy="#{colaborador.tipoDeDocumentoDeIdentidad}">
+                        <h:outputText value="#{colaborador.tipoDeDocumentoDeIdentidad}" 
+                                      class="border-2 border-dashed border-indigo-500 py-1 px-4 rounded"/>
+                    </p:column>
+                    <p:column headerText="Num. Ident." sortBy="#{colaborador.numeroDeDocumentoDeIdentidad}">
+                        <h:outputText value="#{colaborador.numeroDeDocumentoDeIdentidad}" />
+                    </p:column>
+                    <p:column headerText="Nombres" sortBy="#{colaborador.nombres}">
+                        <h:outputText value="#{colaborador.nombres}" />
+                    </p:column>
+                    <p:column headerText="Apellidos" sortBy="#{colaborador.apellidoPaterno} #{colaborador.apellidoMaterno}">
+                        <h:outputText value="#{colaborador.apellidoPaterno} #{colaborador.apellidoMaterno}" />
+                    </p:column>
+                    <p:column headerText="Correo" sortBy="#{colaborador.correoElectronico}">
+                        <h:outputText value="#{colaborador.correoElectronico}" />
+                    </p:column>
+                    <p:column headerText="¿Confirmado?">
+                        <h:outputText value="#{colaborador.confirmado ? 'SI' : 'NO'}" class="usuario-confirmado-#{colaborador.confirmado}"/>
+                    </p:column>
+                    <p:column class="capitalize" headerText="Estado" sortBy="#{colaborador.activo}">
+                        <p:tag
+                            icon="#{colaborador.activo == 'ACTIVO' ? 'pi pi-check' : 'pi pi-times' }" 
+                            severity="#{colaborador.activo == 'ACTIVO'  ? 'success' : 'danger' }"                               
+                            value="#{colaborador.activo.toLowerCase()}" rounded="true">
+                        </p:tag>
+                    </p:column>
+                    <p:column exportable="false" headerText="Acciones">
+                        <p:linkButton outcome="/faces/layouts/usuarios/soporte/actualizar" 
+                                      icon="pi pi-pencil" styleClass="edit-button rounded-button ui-button-info" style="margin-right:20px;">
+                            <f:param name="idUsuario" value="#{colaborador.id}"/>
+                        </p:linkButton>
+                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                         process="@this"
+                                         oncomplete="PF('deleteUsuarioDialog').show()">
+                            <f:setPropertyActionListener value="#{colaborador}" target="#{pruebasBean.usuarioDTO}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="dialogs">
+                <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+
+                <p:confirmDialog widgetVar="deleteUsuarioDialog" showEffect="fade" width="300"
+                                 message="¿Eliminar el usuario?" header="Confirmar" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check" 
+                                     actionListener="#{pruebasBean.eliminarUsuario()}"
+                                     process="@this"
+                                     oncomplete="PF('deleteUsuarioDialog').hide()"
+                                     />
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteUsuarioDialog').hide()" />
+                </p:confirmDialog>
+
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" update="msgs" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

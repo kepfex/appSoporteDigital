@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/views/templates/template-dashboard.xhtml">
+        
+        <ui:define name="titulo-head">Solicitudes</ui:define>
+        <ui:define name="Verificar-usuario">
+            <f:event type="preRenderView" listener="#{validacionTipoUsuarioBean.validarAccesoCliente()}"/>
+        </ui:define>
+        
+        <ui:define name="sidebar">
+            <ui:include src="/WEB-INF/views/components/sidebar-cliente.xhtml"/>
+        </ui:define>
+
+        <ui:define name="body-dashboard">
+            <h2 class="mb-10 text-2xl font-bold tracking-tight text-gray-900">Solicitudes atendidas</h2>
+            <h:form id="form">
+                <!-- Mensaje de Éxito -->
+                <p:growl id="messages" showDetail="true"/>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton value="Nueva Solicitud" icon="pi pi-plus" actionListener="#{solicitudBean.openNew()}"
+                                         update=":dialogs:manage-solicitud-content" oncomplete="PF('manageSolicitudDialog').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                            <p:resetInput target=":dialogs:manage-solicitud-content" />
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="dt-solicitudes" widgetVar="dtSolicitudes" var="solicitud" value="#{solicitudBean.filtrarSolicitudesPorEstado('ATENDIDA')}"
+                             reflow="true" styleClass="products-table"
+                             rowKey="#{solicitud.id}" paginator="true" rows="10" selectionRowMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">SOLICITUDES</span>
+                            <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtSolicitudes').filter()" placeholder="Buscar" />
+                            </span>
+                        </div>
+                    </f:facet>
+
+
+                    <p:column headerText="Codigo" 
+                              sortBy="#{solicitud.year}#{solicitud.mes}#{solicitud.numeroCorrelativo}" 
+                              filterBy="#{solicitud.year}#{solicitud.mes}#{solicitud.numeroCorrelativo}"
+                              style="width: 80px;">
+                        <h:outputText value="#{solicitud.year}#{solicitud.mes}#{solicitud.numeroCorrelativo}" style="font-weight: 700"/>
+                    </p:column>
+                    <p:column headerText="Fecha Creación" 
+                              sortBy="#{solicitud.fechaHora.format(solicitudBean.formatterFecha)} - #{solicitud.fechaHora.format(solicitudBean.formatterHora)}" 
+                              filterBy="#{solicitud.fechaHora.format(solicitudBean.formatterFecha)} - #{solicitud.fechaHora.format(solicitudBean.formatterHora)}">
+                        <h:outputText value="#{solicitud.fechaHora.format(solicitudBean.formatterFecha)} - #{solicitud.fechaHora.format(solicitudBean.formatterHora)}"/>
+                    </p:column>
+                    <p:column headerText="Motivo" sortBy="#{solicitud.motivo}" filterBy="#{solicitud.motivo}">
+                        <h:outputText value="#{solicitud.motivo}" />
+                    </p:column>
+                    <p:column headerText="Tipo" 
+                              sortBy="#{solicitud.tipo.descripcion}" 
+                              filterBy="#{solicitud.tipo.descripcion}">
+                        <h:outputText value="#{solicitud.tipo.descripcion}" class="tipo-solicitud-#{solicitud.tipo.codigo.toLowerCase()}"/>
+                    </p:column>
+                    <p:column headerText="Estado" 
+                              sortBy="#{solicitud.estado}" 
+                              filterBy="#{solicitud.estado}">
+                        <h:outputText value="#{solicitud.estado}" class="estado-solicitud-#{solicitud.estado.name().toLowerCase()}"/>
+                    </p:column>
+                    <p:column exportable="false" ariaHeaderText="Actions">
+                        <p:commandButton value="Detalles" icon="pi pi-eye"
+                                         oncomplete="PF('dlg2').show()"
+                                         update=":dialogs:detalle-solicitud"
+                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                            <f:setPropertyActionListener value="#{solicitud}" target="#{solicitudBean.solicitud}" />
+                            <p:resetInput target=":dialogs:detalle-solicitud" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="dialogs">
+
+                <p:dialog header="Registra una nueva Solicitud" widgetVar="manageSolicitudDialog" showEffect="fade" modal="true" 
+                          responsive="true">
+                    <p:outputPanel id="manage-solicitud-content" class="ui-fluid">
+                        <!-- Inicio Dialogo registro solicitud -->
+                        <p:outputPanel >
+                            <div class="field">
+                                <p:outputLabel for="tipo" value="Tipo de solicitud" class="font-semibold"/>
+                                <p:selectOneMenu id="tipo" value="#{solicitudBean.solicitud.tipo}"
+                                                 required="true">
+                                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{solicitudBean.tiposSolicitud}" var="tipo"
+                                                   itemLabel="#{tipo.descripcion}" itemValue="#{tipo}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="field">
+                                <p:outputLabel for="description">Description</p:outputLabel>
+                                <p:inputTextarea id="description" value="#{solicitudBean.solicitud.motivo}" required="true"/>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer" >
+                        <p:commandButton  value="Enviar" icon="pi pi-check" actionListener="#{solicitudBean.guardarSolicitud()}"
+                                          update="manage-solicitud-content" process="manage-solicitud-content @this" />
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSolicitudDialog').hide()"
+                                         class="ui-button-secondary" type="button" />
+                    </f:facet>
+                </p:dialog>
+
+                <p:confirmDialog widgetVar="deleteUsuarioDialog" showEffect="fade" width="300"
+                                 message="¿Eliminar el usuario?" header="Confirmar" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check" 
+                                     actionListener="#{pruebasBean.eliminarUsuario()}"
+                                     process="@this"
+                                     oncomplete="PF('deleteUsuarioDialog').hide()"
+                                     />
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteUsuarioDialog').hide()" />
+                </p:confirmDialog>
+
+
+                <p:dialog header="Detalles de tu Solicitud" widgetVar="dlg2" showEffect="fade" modal="true" closeOnEscape="true">
+
+                    <p:outputPanel id="detalle-solicitud" class="ui-fluid w-96">
+                        <!-- Inicio Ver detalles de registro solicitud -->
+                        <p:outputPanel id="view-solicitud-content" class="ui-fluid" >
+                            <p:outputPanel  >
+                                <div class="field">
+                                    <span class="font-bold">Código: </span>
+                                    <p:outputLabel >#{solicitudBean.solicitud.year}#{solicitudBean.solicitud.mes}#{solicitudBean.solicitud.numeroCorrelativo}</p:outputLabel>
+                                </div>
+                                <div class="field">
+                                    <span class="font-bold">Solicitado el  </span>
+                                    <p:outputLabel >#{solicitudBean.solicitud.fechaHora.format(solicitudBean.formatterFecha)}</p:outputLabel>
+                                    <span class="font-bold"> a las </span>
+                                    <p:outputLabel >#{solicitudBean.solicitud.fechaHora.format(solicitudBean.formatterHora)}.</p:outputLabel>
+                                </div>
+                                <div class="field">
+                                    <span class="font-bold">Fecha asignación: </span>
+                                    <p:outputLabel >#{solicitudBean.solicitud.fechaHoraAsignacion == null ? 'Por asignar': solicitudBean.solicitud.fechaHoraAsignacion}</p:outputLabel>
+                                </div>
+                                <div class="field">
+                                    <span class="font-bold">Estado: </span>
+                                    <p:outputLabel >#{solicitudBean.solicitud.estado.descripcion}</p:outputLabel>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                    </p:outputPanel>
+                </p:dialog>
+
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

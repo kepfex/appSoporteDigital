@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
+
+    <h:head>
+        <title>Soporte Digital | <ui:insert name="titulo-head">Gestiona tus solicitudes</ui:insert></title>
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+
+        <h:outputStylesheet library="css" name="app.css"/>
+        <h:outputStylesheet library="css" name="myStyles.css"/>
+        <ui:insert name="Verificar-usuario">
+            
+        </ui:insert>
+    </h:head>
+    <h:body>
+        <div class="min-h-screen grid grid-cols-1 xl:grid-cols-6">
+            <aside
+                class="xl:h-[100vh] overflow-y-auto fixed xl:static w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto h-full top-0 bg-secondary-100 text-primary-50 p-4 flex flex-col justify-between z-50 transition-all -left-full"
+                id="side-bar"
+                >
+                <div>
+                    <h1 class="text-center text-xl font-bold mb-10">
+                        Soporte Digital<span class="text-primary-500 text-4xl">.</span>
+                    </h1>
+                    <span class="flex justify-center mb-10 font-bold text-amber-400">
+                        #{sessionScope.usuarioLogeadoDTO.tipoUsuario.name()}
+                    </span>
+                    <ul class="">
+                        <ui:insert name="sidebar"/>
+                    </ul>
+                    
+                </div>
+                <nav class="flex justify-end">
+                    <button class="bg-green-500 w-10 rounded-s xl:hidden" id="ocultar-sidebar">
+                        <i
+                            class="bx bx-left-arrow-alt text-white text-2xl transition-colors"
+                            ></i>
+                    </button>
+                </nav>
+            </aside>
+            <div class="xl:col-span-5">
+                <header
+                    class="h-[10vh] border-b border-gray-300 flex items-center justify-between xl:justify-end px-8 py-4 shadow-md"
+                    >
+                    <button class="bg-green-600 text-white px-2 rounded xl:hidden h-full" id="boton-open-sidebar">
+                        <i class="bx bx-menu text-2xl"></i>
+                    </button>
+                    <nav class="relative flex items-center gap-2">
+                        <button
+                            class="flex items-center gap-x-2 hover:bg-primary-200 p-2 rounded-lg transition-colors"
+                            id="avatar-btn"
+                            >
+                            <img
+                                src="https://img.freepik.com/foto-gratis/feliz-optimista-guapo-gerente-ventas-latina-apuntando-lado-mirando-camara_1262-12679.jpg"
+                                class="w-6 h-6 object-cover rounded-full"
+                                />
+                            <span class="text-gray-800 text-sm">#{sessionScope.usuarioLogeadoDTO.nombres}</span>
+                            <i class="bx bx-chevron-down"></i>
+                        </button>
+
+                        <!-- Perfil desplegable -->
+                        <ul
+                            class="absolute p-4 top-12 right-0 w-[18rem] bg-white rounded-md opacity-0 scale-0 transform origin-top-right transition-all duration-400 flex flex-col gap-1 z-[100000]"
+                            id="profile-menu"
+                            >
+                            <li class="p-0 hover:bg-transparent">
+                                <a
+                                    href="#"
+                                    class="rounded-lg transition-colors text-gray-800 hover:bg-gray-300 flex items-center gap-x-4 p-2 flex-1"
+                                    >
+                                    <img
+                                        src="https://img.freepik.com/foto-gratis/feliz-optimista-guapo-gerente-ventas-latina-apuntando-lado-mirando-camara_1262-12679.jpg"
+                                        class="w-10 h-10 object-cover rounded-full"
+                                        />
+                                    <div class="flex flex-col text-sm">
+                                        <span class="font-bold w-[196px] truncate">Hola <span class="block font-semibold">#{sessionScope.usuarioLogeadoDTO.nombres}</span></span>
+                                        <span class="text-sm text-gray-700 w-[196px] truncate">#{sessionScope.usuarioLogeadoDTO.correo}</span>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <hr class="my-5 border-gray-600" />
+
+                            <li class="p-0 hover:bg-transparent">
+                                <a
+                                    href="#"
+                                    class="rounded-lg text-gray-700 hover:bg-gray-300 flex items-center gap-x-4 py-2 px-6 flex-1 transition-colors"
+                                    >
+                                    <i class="bx bx-cog"></i> Configuración
+                                </a>
+                            </li>
+
+                            <li class="p-0 hover:bg-transparent">
+                                <h:form>
+                                <h:commandLink
+                                    class="rounded-lg text-gray-700 hover:text-white font-medium hover:bg-red-500 flex items-center gap-x-4 py-2 px-6 flex-1 transition-colors group"
+                                    action="#{validacionTipoUsuarioBean.cerrarSesion()}"
+                                    >
+                                    <i
+                                        class="bx bx-log-out"
+                                        ></i>
+                                    Cerrar Sesión
+                                </h:commandLink>
+                                    </h:form>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
+                <div class="h-[90vh] overflow-y-auto p-8">
+                    <ui:insert name="body-dashboard"/>
+                </div>
+            </div>
+        </div>
+        <h:outputScript library="js" name="app.js"/>
+        <h:outputScript library="js" name="navegacion.js"/>
+        <h:outputScript library="js" name="ocultarFilterby.js"/>
+    </h:body>
+</html>
